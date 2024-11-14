@@ -7,21 +7,27 @@ const port = 3000;
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-  host: 'host.docker.internal', // Use this for Docker on Windows/Mac
-  user: 'my_user',
-  password: 'my_password',
-  database: 'my_database'
+  host: process.env.DB_HOST || '172.31.x.x', // Use EC2 host's private IP address
+  user: process.env.DB_USER || 'my_user',
+  password: process.env.DB_PASSWORD || 'my_password',
+  database: process.env.DB_NAME || 'my_database'
 });
 
-// Connect to the database
-db.connect((err) => {
-  if (err) {
-    console.error('Database connection failed:', err);
-    process.exit(1);
-  }
-  console.log('Connected to MySQL database!');
-  seedDatabase();
-});
+// Function to connect to the database with retries
+function connectToDatabase() {
+  db.connect((err) => {
+    if (err) {
+      console.error('Database connection failed:', err);
+      console.log('Retrying in 5 seconds...');
+      setTimeout(connectToDatabase, 5000);
+    } else {
+      console.log('Connected to MySQL database!');
+      seedDatabase();
+    }
+  });
+}
+
+connectToDatabase();
 
 // Function to seed the database with random users
 function seedDatabase() {
@@ -32,9 +38,7 @@ function seedDatabase() {
 
     const query = 'INSERT INTO users (name, email, age) VALUES (?, ?, ?)';
     db.query(query, [name, email, age], (err) => {
-      if (err) {
-        console.error('Error inserting data:', err);
-      }
+      if (err) console.error('Error inserting data:', err);
     });
   }
   console.log('Database seeded with random users.');
