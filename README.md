@@ -48,9 +48,20 @@ Make sure you have the following installed:
 ```bash
 docker build -t my-node-app-with-host-db .
 ```
+- To get the private IP address of your EC2 instance:
+```bash
+curl http://169.254.169.254/latest/meta-data/local-ipv4
+```
 - Run the docker container
 ```bash
-docker run -d --name web-server -p 3000:3000 my-node-app-with-host-db
+docker run -d \
+  --name web-server \
+  -e DB_HOST=172.31.x.x \
+  -e DB_USER=my_user \
+  -e DB_PASSWORD=my_password \
+  -e DB_NAME=my_database \
+  -p 3000:3000 \
+  my-node-app-with-host-db
 ```
 
 ### 3. Access the Application
