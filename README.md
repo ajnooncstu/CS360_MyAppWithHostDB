@@ -13,6 +13,27 @@ Make sure you have the following installed:
 
 ### 1. MySQL Database Setup
 - Install MySQL on your host machine if it's not already installed.
+  ```bash
+  sudo dnf install mysql-server -y
+  sudo systemctl start mysqld
+  sudo systemctl enable mysqld
+  ```
+- Configure MySQL to accept remote connections
+  ```bash
+  sudo nano /etc/my.cnf
+  ```
+  find the line:
+  ```ini
+  bind-address = 127.0.0.1
+  ```
+  change it to
+  ```ini
+  bind-address = 0.0.0.0
+  ```
+  Restart MySQL:
+  ```bash
+  sudo systemctl restart mysqld
+  ```  
 - Log in to MySQL:
   ```bash
   mysql -u root -p
