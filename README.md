@@ -20,6 +20,7 @@ Make sure you have the following installed in Amazon Linux 2 EC2 Instance:
   sudo yum -nogpg install mysql-community-server
   ```
 - Start MySQL
+  ```bash
   sudo systemctl start mysqld
   sudo systemctl enable mysqld
   ```
