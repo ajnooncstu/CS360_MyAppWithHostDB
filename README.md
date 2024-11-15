@@ -14,22 +14,25 @@ Make sure you have the following installed:
 ### 1. MySQL Database Setup
 - Install MySQL on your host machine if it's not already installed.
   ```bash
-  sudo dnf install -y mariadb105-server
-  sudo systemctl start mariadb
-  sudo systemctl enable mariadb
+  sudo yum update -y
+  sudo amazon-linux-extras install epel -y
+  sudo wget https://dev.mysql.com/get/mysql80-community-release-el7-5.noarch.rpm
+  sudo rpm -ivh mysql80-community-release-el7-5.noarch.rpm
+  sudo yum -nogpg install mysql-community-server
   ```
-- Configure MySQL to accept remote connections
+- Start MySQL
+  sudo systemctl start mysqld
+  sudo systemctl enable mysqld
+  ```
+- Get the temporary root password
   ```bash
-  sudo nano /etc/my.cnf
+  sudo cat /var/log/mysqld.log |grep "A temporary password"
   ```
-  find and uncomment the line:
-  ```ini
-  bind-address = 0.0.0.0
-  ```
-  Restart MySQL:
+- Make MySQL secure installation
   ```bash
-  sudo systemctl restart mysqld
-  ```  
+  sudo mysql_secure_installation
+  ```
+  to set a new root password, remove anonymous users, disablow root login remotely and remote test database and its access. Don't forget to reload privilege tables. 
 - Log in to MySQL:
   ```bash
   mysql -u root -p
@@ -38,26 +41,26 @@ Make sure you have the following installed:
   ```sql
   source init.sql;
   ```
+- Create and configure a new user
+  ```sql
+  CREATE USER 'your_user_name'@'%' IDENTIFIED BY 'your_password';
+  GRANT ALL PRIVILEGES ON my_database.* TO 'your_user_name'@'%';
+  FLUSH PRIVILEGES;
+  ```
 
 ### 2. Build and Run the Docker Container
+- Edited the configuration of the database in src/index.js
+
 - Build the docker image named my-node-app-with-host-db from the dockerfile
 ```bash
-docker build -t my-node-app-with-host-db .
-```
-- To get the private IP address of your EC2 instance:
-```bash
-curl http://169.254.169.254/latest/meta-data/local-ipv4
+docker build -t my-node-app .
 ```
 - Run the docker container
 ```bash
 docker run -d \
-  --name web-server \
-  -e DB_HOST=172.31.x.x \
-  -e DB_USER=my_user \
-  -e DB_PASSWORD=my_password \
-  -e DB_NAME=my_database \
+  --name your-container-name \
   -p 3000:3000 \
-  my-node-app-with-host-db
+  my-node-app
 ```
 
 ### 3. Access the Application
