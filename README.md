@@ -60,7 +60,13 @@ docker build -t my-node-app .
 docker run -d \
   --name your-container-name \
   -p 3000:3000 \
+  -e DB_HOST='your_ec2_private_ip' \
+  -e DB_USER='your_user_name' \
+  -e DB_PASSWORD='your_password' \
+  -e DB_NAME='my_database' \
+  -e PORT=3000 \
   my-node-app
+
 ```
 
 ### 3. Access the Application
