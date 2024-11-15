@@ -6,11 +6,10 @@ const port = 3000;
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-  host: 'localhost', // Change 'localhost' to your DB Server IP if needed
-  user: 'your_user_name',
-  password: 'your_password',
-  database: 'my_database'
-});
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || '',
+  database: process.env.DB_NAME || 'my_database'                   });
 
 // Connect to the MySQL database
 db.connect((err) => {
