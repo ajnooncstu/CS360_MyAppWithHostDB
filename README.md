@@ -1,12 +1,11 @@
 # MyAppWithHostDB - Node.js with MySQL Database in the Docker Host Example
 
 ## Overview
-This project demonstrates how to connect a Node.js application running in a Docker container to a MySQL database hosted on the local machine. The application uses the Express framework and performs CRUD operations on a MySQL database.
+This project demonstrates how to connect a Node.js application running in a Docker container to a MySQL database hosted on the local machine (Amazon Linux 2). The application uses the Express framework and performs CRUD operations on a MySQL database.
 
 ## Prerequisites
-Make sure you have the following installed:
-- MySQL Server
-- Node.js
+Make sure you have the following installed in Amazon Linux 2 EC2 Instance:
+- Git
 - Docker
 
 ## Setup Instructions
