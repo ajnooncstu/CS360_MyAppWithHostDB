@@ -6,10 +6,10 @@ const port = 3000;
 
 // MySQL connection configuration
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || 'localhost', // Change 'localhost' to your EC2 IP if needed
-  user: process.env.DB_USER || 'my_user',
-  password: process.env.DB_PASSWORD || 'my_password',
-  database: process.env.DB_NAME || 'my_database'
+  host: 'localhost', // Change 'localhost' to your DB Server IP if needed
+  user: 'your_user_name',
+  password: 'your_password',
+  database: 'my_database'
 });
 
 // Connect to the MySQL database
